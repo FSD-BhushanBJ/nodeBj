@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Front-end</title>
+    <style>
+        body {
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            background: #f4f6f8;
+            color: #400909;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+ 
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: #bc2020;
+            padding: 30px 20px;
+            border-radius: 3px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+ 
+        h1 {
+            text-align: center;
+            color: #0005029c;
+            font-size: 28px;
+            margin-bottom: 15px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+ 
+        p {
+            text-align: center;
+            font-size: 16px;
+            color: #0b0808;
+        }
+ 
+        input[type="text"] {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+ 
+        button {
+            padding: 10px 20px;
+            margin: 10px 5px 0 0;
+            background-color: #2d4258;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+ 
+        button:hover {
+            background-color: #091f37;
+        }
+ 
+        #output {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f0fe;
+            color: #0a0808;
+            border-left: 4px solid #007bff;
+            border-radius: 5px;
+            font-size: 17px;
+        }
+ 
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 24px;
+            }
+ 
+            button {
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+ 
+<body>
+    <div class="container">
+        <h1>Welcome to First Page</h1>
+        <p>
+            This is simple HTML page to demonstrate FETCH.
+        </p>
+        <p>
+            Feel Free to explore and modify it!
+        </p>
+        <h1 id="output-label"></h1>
+ 
+        <input type="text" id="input-one" placeholder="Type something here name ...">
+        <input type="text" id="input-two" placeholder="Type something here message...">
+ 
+ 
+        <div style="margin-top: 10px;">
+            
+            <button onclick="postMessage()">POST</button>
+            <button onclick="getMessage()">GET</button>
+           
+        </div>
+ 
+        <!-- <div id="output"></div> -->
+    </div>
+    <script>
+
+
+        // array disctionery
+        let namemsgArray = []
+
+
+        // massage input
+        async function getMessage() {
+
+            let string = "";
+
+            // fetch functions
+            let response = await fetch(
+                "http://127.0.0.1:4000/students",
+        {
+            method: "GET",
+            header:{
+                "Content-Type": "application/json"
+            },
+        }
+            );
+
+            if(!response.ok){
+             alert ("Error fetching data");
+             return;
+            }
+            const data = await response.json();
+            namemsgArray = data;
+
+            for (let i = 0; i < namemsgArray.length; i++){
+               
+               string += `Name : ${namemsgArray[i].name} Message : ${namemsgArray[i].msg}` +
+                "<br/>";
+            }
+            document.getElementById("output-label").innerHTML = string;
+         }
+
+
+        //  post msg input field
+        async function postMessage() {
+
+            const nameMsg = {
+                name : document.getElementById("input-one").value,
+                msg : document.getElementById("input-two").value,
+            };
+            
+
+            let response = await fetch(
+                "http://127.0.0.1:4000/student",
+                {
+                    method: "POST",
+                    header: {
+                   "Content-Type": "application/plain"     
+                    },
+                    body:JSON.stringify(nameMsg)
+                }
+            )
+            // namemsgArray.push(nameMsg);
+
+            alert("data sucess-full")
+
+            document.getElementById("input-one").value = "";
+            document.getElementById("input-two").value = "";
+ 
+           
+ 
+        }
+ 
+    </script>
+ 
+</body>
+ 
+</html>
+ 
